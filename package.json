@@ -1,0 +1,19 @@
+{
+  "name": "multidep-example",
+  "version": "0.0.1",
+  "description": "Example of CommonJS project bundled as taist addon",
+  "main": "index.js",
+  "scripts": {
+    "build": "multidep"
+  },
+  "author": "Vitaliy V. Makeev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmakeev/multidep-example.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.9.3",
+    "moment": "^2.10.3"
+  }
+}

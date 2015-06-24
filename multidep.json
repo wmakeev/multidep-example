@@ -1,0 +1,12 @@
+{
+  "taist": {
+    "manifest": {
+      "siteName": "МойСклад",
+      "siteRegexp": "online.moysklad.ru"
+    }
+  },
+  "externalDependencies": {
+    "lodash": true,
+    "moment": true
+  }
+}
