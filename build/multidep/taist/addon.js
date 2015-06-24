@@ -1,7 +1,7 @@
 function init() {
 
     function defineModule (define, taistApi, entryPoint) {
-define('multidep-example', ["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
+define('multidep-example@0.0.1', ["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
     var __global_require = require;
     var require = (function() {
         var args = arguments;
