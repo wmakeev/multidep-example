@@ -1,1 +1,9 @@
-{"siteName":"МойСклад","siteRegexp":"online.moysklad.ru","id":"multidep-example","js":"addon.js","title":"multidep-example@0.0.1","shortDescription":"Example of CommonJS project bundled as taist addon","description":"addon.md"}
+{
+  "siteName": "МойСклад",
+  "siteRegexp": "online.moysklad.ru",
+  "id": "multidep-example",
+  "js": "addon.js",
+  "title": "multidep-example@0.0.2",
+  "shortDescription": "Example of CommonJS project bundled as taist addon",
+  "description": "addon.md"
+}
