@@ -1,10 +1,10 @@
 {
   "name": "multidep-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Example of CommonJS project bundled as taist addon",
   "main": "index.js",
   "scripts": {
-    "build": "multidep"
+    "build": "multidep --taist-site-name МойСклад --taist-site-regexp online.moysklad.ru"
   },
   "author": "Vitaliy V. Makeev",
   "repository": {
@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "lodash": "^3.9.3",
-    "moment": "^2.10.3"
+    "lodash": "^3.9.0",
+    "moment": "^2.10.0"
   }
 }

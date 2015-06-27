@@ -1,27 +1,28 @@
 function init() {
 
-    function defineModule (define, taistApi, entryPoint) {
-define('multidep-example@0.0.1', ["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
-    var __global_require = require;
-    var require = (function() {
-        var args = arguments;
-        var deps = ["lodash@3.9.3","moment@2.10.3"].reduce(function(res, dep, index) {
-            return res[dep] = index;
-        }, {});
-        return function(name) {
-            if (name in deps) {
-                return args[deps[name]];
-            } else if (__global_require) {
-                return __global_require(name);
-            } else {
-                var err = new Error("Cannot find module '" + name + "'");
-                err.code = 'MODULE_NOT_FOUND';
-                throw err;
-            }
-        }
-    })();
+  function startModule(requirejs, taistApi, entryPoint) {
+    requirejs(["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
+  var __global_require__ = require;
+  var require = (function() {
+    var args = arguments;
+    var deps = ["lodash@3.9.3","moment@2.10.3"].reduce(function(res, dep, index) {
+      res[dep] = index;
+      return res;
+    }, {});
+    return function(name) {
+      if (name in deps) {
+        return args[deps[name]];
+      } else if (__global_require__) {
+        return __global_require__(name);
+      } else {
+        var err = new Error("Cannot find module '" + name + "'");
+        err.code = 'MODULE_NOT_FOUND';
+        throw err;
+      }
+    }
+  })();
 
-return/******/ (function(modules) { // webpackBootstrap
+  /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -70,9 +71,7 @@ return/******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(1);
 	var moment = __webpack_require__(2);
 
-	taistApi.log('in addon');
-
-	module.exports = 'I use lodash@' + _.VERSION + ', and moment@' + moment.version;
+	taistApi.log('I use lodash@' + _.VERSION + ', and moment@' + moment.version);
 
 /***/ },
 /* 1 */
@@ -89,37 +88,64 @@ return/******/ (function(modules) { // webpackBootstrap
 /***/ }
 /******/ ]);
 });
-    }
 
-    return {
-        start: function(taistApi, entryPoint) {
-            var key = 'AMD_DEFINE';
-            var timeout = 15000;
-            var guid = "70152108-2745-4c6a-b529-c4fe10e488a7";
-            var publishEventName  = guid + ':publish';
-            var discoverEventName = guid + ':discover';
-            var resolved = false;
-            var listener = function (ev) {
-                ev = ev.detail;
-                if (ev && ev.key === key) {
-                    window.removeEventListener(publishEventName, listener);
-                    resolved = true;
-                    defineModule (ev.value, taistApi, entryPoint)
-                }
-            };
-            window.addEventListener(publishEventName, listener);
-            var event = new CustomEvent(discoverEventName, {
-                detail: {
-                    key: key
-                }
-            });
-            window.dispatchEvent(event);
-            setTimeout(function () {
-                if (!resolved) {
-                    window.removeEventListener(publishEventName, listener);
-                    throw new Error('Waiting for define timeout in module [multidep-example]');
-                }
-            }, timeout)
-        }
-    };
+  }
+  
+  function discoverAMD(timeout, cb) {
+  var guid = "70152108-2745-4c6a-b529-c4fe10e488a7";
+  function discover(key, handler) {
+  var discoveredEventsIds = {};
+  var publishEventName = guid + ':publish';
+  var discoverEventName = guid + ':discover';
+
+  var stop = function () {
+    window.removeEventListener(publishEventName, listener);
+  };
+
+  var listener = function (ev) {
+    ev = ev.detail;
+    if (ev && ev.key === key && !discoveredEventsIds.hasOwnProperty(ev.id)) {
+      discoveredEventsIds[ev.id] = true;
+      handler(ev.value, stop);
+    }
+  };
+  window.addEventListener(publishEventName, listener);
+
+  var event = new CustomEvent(discoverEventName, {
+    detail: {
+      key: key
+    }
+  });
+  window.dispatchEvent(event);
+
+  return {
+    stop: stop
+  }
+}
+
+  var resolved = false;
+
+  var disc = discover('amd:ready', function (data) {
+    resolved = true;
+    disc.stop();
+    cb(null, data);
+  });
+
+  setTimeout(function () {
+    if (!resolved) {
+      disc.stop();
+      cb(new Error('Waiting for AMD timeout'));
+    }
+  }, timeout);
+}
+
+  
+  return {
+    start: function(taistApi, entryPoint) {
+      discoverAMD(15000, function (err, amd) {
+        if (err) throw err;
+        startModule(amd.require, taistApi, entryPoint);
+      })
+    }
+  };
 }
