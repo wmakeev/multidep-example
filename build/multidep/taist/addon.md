@@ -1,4 +1,4 @@
 multidep-example
 ======================
 
-Example of CommonJS project bundled in **Taist** addon by **multidep-cli**.
+Example of CommonJS project bundled as **Taist** addon by **multidep-cli**.
