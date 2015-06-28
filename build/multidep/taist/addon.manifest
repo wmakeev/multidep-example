@@ -3,7 +3,7 @@
   "siteRegexp": "online.moysklad.ru",
   "id": "multidep-example",
   "js": "addon.js",
-  "title": "multidep-example@0.0.3",
+  "title": "multidep-example@0.0.4",
   "shortDescription": "Example of CommonJS project bundled as taist addon",
   "description": "addon.md"
 }

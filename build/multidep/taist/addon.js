@@ -3,15 +3,15 @@ function init() {
   function startModule(requirejs, taistApi, entryPoint) {
     requirejs(["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
   var __global_require__ = require;
+  var __args__ = arguments;
   var require = (function() {
-    var args = arguments;
     var deps = ["lodash@3.9.3","moment@2.10.3"].reduce(function(res, dep, index) {
       res[dep] = index;
       return res;
     }, {});
     return function(name) {
       if (name in deps) {
-        return args[deps[name]];
+        return __args__[deps[name]];
       } else if (__global_require__) {
         return __global_require__(name);
       } else {
