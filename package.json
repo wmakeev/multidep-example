@@ -1,6 +1,6 @@
 {
   "name": "multidep-example",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Example of CommonJS project bundled as taist addon",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "lodash": "^3.9.0",
+    "lodash": "^3.0.0",
     "moment": "^2.10.0"
   }
 }
