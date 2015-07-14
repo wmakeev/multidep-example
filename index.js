@@ -1,4 +1,5 @@
-var _ = require('lodash');
-var moment = require('moment');
+// Require local modules (will be bundled with multidep-cli)
+var exLib = require('./ext-lib');
 
-taistApi.log('I use lodash@' + _.VERSION + ', and moment@' + moment.version);
+// Call local module
+exLib('Example');

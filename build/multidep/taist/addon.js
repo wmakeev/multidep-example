@@ -1,11 +1,12 @@
 function init() {
 
   function startModule(requirejs, taistApi, entryPoint) {
-    requirejs(["multiver!lodash@3.9.3","multiver!moment@2.10.3"], function() {
+    requirejs(["multiver!lodash@^3.0.0","multiver!moment@^2.10.0"], function() {
+  var global = window;
   var __global_require__ = require;
   var __args__ = arguments;
   var require = (function() {
-    var deps = ["lodash@3.9.3","moment@2.10.3"].reduce(function(res, dep, index) {
+    var deps = ["lodash@^3.0.0","moment@^2.10.0"].reduce(function(res, dep, index) {
       res[dep] = index;
       return res;
     }, {});
@@ -68,22 +69,36 @@ function init() {
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(1);
-	var moment = __webpack_require__(2);
+	// Require local modules (will be bundled with multidep-cli)
+	var exLib = __webpack_require__(1);
 
-	taistApi.log('I use lodash@' + _.VERSION + ', and moment@' + moment.version);
+	// Call local module
+	exLib('Example');
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = require("lodash@3.9.3");
+	// Require external modules (will not be bundled, but required in runtime on client)
+	var _ = __webpack_require__(2);
+	var moment = __webpack_require__(3);
+
+	module.exports = function (prefix) {
+	  // Use global taistApi object
+	  taistApi.log(prefix + ': I use lodash@' + _.VERSION + ', and moment@' + moment.version);
+	};
 
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = require("moment@2.10.3");
+	module.exports = require("lodash@^3.0.0");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("moment@^2.10.0");
 
 /***/ }
 /******/ ]);
@@ -104,7 +119,7 @@ function init() {
 
   var listener = function (ev) {
     ev = ev.detail;
-    if (ev && ev.key === key && !discoveredEventsIds.hasOwnProperty(ev.id)) {
+    if (ev && ev.id && ev.key === key && !discoveredEventsIds.hasOwnProperty(ev.id)) {
       discoveredEventsIds[ev.id] = true;
       handler(ev.value, stop);
     }
